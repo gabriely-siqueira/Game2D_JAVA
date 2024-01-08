@@ -1,7 +1,7 @@
 package entity;
 
-import Main.GamePanel;
-import Main.KeyHandler;
+import main.GamePanel;
+import main.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2- (gp.tileSize/2);
 
-        solidArea = new Rectangle(8,16,30,30);
+        solidArea = new Rectangle(8,16,31,31);
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
@@ -112,20 +112,28 @@ public class Player extends Entity {
                     gp.playSoundEfect(1);
                     hasKey++;
                     gp.obj[i]=null;
-                    System.out.println("Key:" + hasKey);
+                    gp.ui.showMessage("You got a key!");
                     break;
                 case "Door":
                     if (hasKey > 0){
                         gp.playSoundEfect(3);
                         gp.obj[i]=null;
                         hasKey--;
+                        gp.ui.showMessage("You opened the door");
+                    }else {
+                        gp.ui.showMessage("You need a key");
                     }
-                    System.out.println("Key:" + hasKey);
                     break;
                 case "Boots":
+                    gp.ui.showMessage("Speed up!");
                     gp.playSoundEfect(2);
                     speed += 2;
                     gp.obj[i]= null;
+                    break;
+                case "Chest":
+                    gp.ui.gameFinished = true;
+                    gp.stopMusic();
+                    gp.playSoundEfect(4);
                     break;
             }
         }

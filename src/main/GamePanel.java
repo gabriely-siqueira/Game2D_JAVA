@@ -1,4 +1,4 @@
-package Main;
+package main;
 
 import entity.Player;
 import object.SuperObject;
@@ -26,10 +26,12 @@ public class GamePanel extends JPanel implements Runnable {
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Sound sound = new Sound();
+    Sound music = new Sound();
+    Sound se = new Sound();
     public CollisionChecker checker = new CollisionChecker(this);
     public AssetSetter setter = new AssetSetter(this);
-    private Thread gameThread;
+    public UI ui = new UI(this);
+    public Thread gameThread;
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyH);
@@ -92,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
         // TILE
         tileM.draw(g2);
         // OBJECT
@@ -102,20 +105,22 @@ public class GamePanel extends JPanel implements Runnable {
         }
         // PLAYER
         player.draw(g2);
+        //UI
+        ui.draw(g2);
         g2.dispose();
     }
 
     public void playMusic(int i){
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
-    public void stopMusic(int i){
-        sound.stop();
+    public void stopMusic(){
+        music.stop();
     }
     public void playSoundEfect(int i){
-        sound.setFile(i);
-        sound.play();
+        se.setFile(i);
+        se.play();
     }
 
 }

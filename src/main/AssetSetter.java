@@ -1,11 +1,9 @@
-package Main;
+package main;
 
 import object.Boots;
 import object.Chest;
 import object.Door;
 import object.Key;
-
-import javax.imageio.ImageIO;
 
 public class AssetSetter {
     GamePanel gp;
