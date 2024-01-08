@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UI;
+import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -25,9 +27,9 @@ public class Player extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
-        getAnimationImages();
+        getPlayerImages();
     }
-    public void getAnimationImages() {
+    public void getPlayerImages() {
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_up1.png"));
             up2 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_up2.png"));
@@ -40,7 +42,30 @@ public class Player extends Entity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        up1 = setup("boy_up1");
+        up2 = setup("boy_up2");
+        down1 = setup("boy_down1");
+        down2 = setup("boy_down2");
+        left1 = setup("boy_left1");
+        left2 = setup("boy_left2");
+        right1 = setup("boy_right1");
+        right2 = setup("boy_right2");
+
+
     }
+
+    public BufferedImage setup(String imageName) {
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream("/resource/player/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
 
     public void setDefaultValues() {
         worldX = gp.tileSize*23;
@@ -109,14 +134,14 @@ public class Player extends Entity {
             String objectName = gp.obj[i].name;
             switch (objectName){
                 case "Key":
-                    gp.playSoundEfect(1);
+                    gp.playSoundEffect(1);
                     hasKey++;
                     gp.obj[i]=null;
                     gp.ui.showMessage("You got a key!");
                     break;
                 case "Door":
                     if (hasKey > 0){
-                        gp.playSoundEfect(3);
+                        gp.playSoundEffect(3);
                         gp.obj[i]=null;
                         hasKey--;
                         gp.ui.showMessage("You opened the door");
@@ -126,14 +151,14 @@ public class Player extends Entity {
                     break;
                 case "Boots":
                     gp.ui.showMessage("Speed up!");
-                    gp.playSoundEfect(2);
+                    gp.playSoundEffect(2);
                     speed += 2;
                     gp.obj[i]= null;
                     break;
                 case "Chest":
                     gp.ui.gameFinished = true;
                     gp.stopMusic();
-                    gp.playSoundEfect(4);
+                    gp.playSoundEffect(4);
                     break;
             }
         }

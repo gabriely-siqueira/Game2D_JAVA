@@ -49,7 +49,9 @@ public class GamePanel extends JPanel implements Runnable {
         setter.setObject();
         playMusic(0);
     }
+
     private boolean isRunning = false;
+
     public void startGameThread() {
         if (gameThread == null) {
             gameThread = new Thread(this);
@@ -74,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
 
-        while (gameThread != null) {
+        while (gameThread != null && isRunning) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             lastTime = currentTime;
@@ -95,32 +97,53 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
+        // DEBUG
+        long drawStart = 0;
+        if (keyH.checkDrawTile) {
+            drawStart = System.nanoTime();
+        }
+
         // TILE
         tileM.draw(g2);
+
         // OBJECT
         for (int i = 0; i < obj.length; i++) {
             if (obj[i] != null) {
                 obj[i].draw(g2, this);
             }
         }
+
         // PLAYER
         player.draw(g2);
-        //UI
+
+        // UI
         ui.draw(g2);
-        g2.dispose();
+
+        // DEBUG
+        if (keyH.checkDrawTile) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.white);
+            g2.drawString("Draw Time: " + passed, 10, 400);
+            System.out.println("Draw time: " + passed);
+            g2.dispose();
+        }
     }
 
-    public void playMusic(int i){
+    public void playMusic(int i) {
         music.setFile(i);
         music.play();
         music.loop();
     }
-    public void stopMusic(){
+
+    public void stopMusic() {
         music.stop();
     }
-    public void playSoundEfect(int i){
+
+    public void playSoundEffect(int i) {
         se.setFile(i);
         se.play();
     }
 
 }
+
