@@ -20,8 +20,10 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2- (gp.tileSize/2);
 
-        solidArea = new Rectangle(8,16,30,30);
+        solidArea = new Rectangle(7,14,28,28);
 
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getAnimationImages();
     }
@@ -63,9 +65,16 @@ public class Player extends Entity {
                 direction = "right";
 
             }
+
             //CHECK TILE COLLISION
             collisionOn = false;
             gp.checker.checkTile(this);
+
+            //CHECK OBJECT COLLISION
+            int objIndex = gp.checker.checkObject(this,true);
+            pickUpObject(objIndex);
+
+
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
             if(collisionOn == false){
                 switch (direction){
@@ -93,6 +102,27 @@ public class Player extends Entity {
         }
 
         }
+    }
+
+    public void pickUpObject(int i){
+        if (i != -1){
+            String objectName = gp.obj[i].name;
+            switch (objectName){
+                case "Key":
+                    hasKey++;
+                    gp.obj[i]=null;
+                    System.out.println("Key:" + hasKey);
+                    break;
+                case "Door":
+                    if (hasKey > 0){
+                        gp.obj[i]=null;
+                        hasKey--;
+                    }
+                    System.out.println("Key:" + hasKey);
+                    break;
+            }
+        }
+
     }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
