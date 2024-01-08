@@ -20,7 +20,7 @@ public class Player extends Entity {
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2- (gp.tileSize/2);
 
-        solidArea = new Rectangle(7,14,28,28);
+        solidArea = new Rectangle(8,16,30,30);
 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
@@ -119,6 +119,10 @@ public class Player extends Entity {
                         hasKey--;
                     }
                     System.out.println("Key:" + hasKey);
+                    break;
+                case "Boots":
+                    speed += 2;
+                    gp.obj[i]= null;
                     break;
             }
         }
