@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // SYSTEM
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker checker = new CollisionChecker(this);
@@ -35,7 +35,15 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY AND OBJECT
     public Player player = new Player(this, keyH);
-    public SuperObject obj[] = new SuperObject[10];
+    public SuperObject[] obj = new SuperObject[10];
+
+    // GAME STATE
+    public enum GameState {
+        PLAY,
+        PAUSE
+    }
+
+    public GameState gameState = GameState.PLAY;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -48,6 +56,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         setter.setObject();
         playMusic(0);
+        stopMusic();
+        gameState = GameState.PLAY;
     }
 
     private boolean isRunning = false;
@@ -90,7 +100,10 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if (gameState == GameState.PLAY) {
+            player.update();
+        }
+        // Se houver outras atualizações de jogo, adicione-as aqui
     }
 
     public void paintComponent(Graphics g) {
@@ -107,9 +120,9 @@ public class GamePanel extends JPanel implements Runnable {
         tileM.draw(g2);
 
         // OBJECT
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(g2, this);
+        for (SuperObject anObj : obj) {
+            if (anObj != null) {
+                anObj.draw(g2, this);
             }
         }
 
@@ -144,6 +157,4 @@ public class GamePanel extends JPanel implements Runnable {
         se.setFile(i);
         se.play();
     }
-
 }
-
