@@ -11,13 +11,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    GamePanel gp;
     KeyHandler keyH;
-
     public final int screenX;
     public final int screenY;
     public Player(GamePanel gp, KeyHandler keyH) {
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2- (gp.tileSize/2);
@@ -30,18 +28,6 @@ public class Player extends Entity {
         getPlayerImages();
     }
     public void getPlayerImages() {
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_left2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/resource/player/boy_right2.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         up1 = setup("boy_up1");
         up2 = setup("boy_up2");
         down1 = setup("boy_down1");
@@ -50,8 +36,6 @@ public class Player extends Entity {
         left2 = setup("boy_left2");
         right1 = setup("boy_right1");
         right2 = setup("boy_right2");
-
-
     }
 
     public BufferedImage setup(String imageName) {
@@ -99,7 +83,9 @@ public class Player extends Entity {
             int objIndex = gp.checker.checkObject(this,true);
             pickUpObject(objIndex);
 
-
+            //CHECK NPC COLLISION
+            int npcIndex = gp.checker.checkEntity(this,gp.npc);
+            interactNPC(npcIndex);
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
             if(collisionOn == false){
                 switch (direction){
@@ -134,6 +120,12 @@ public class Player extends Entity {
         }
 
     }
+    public void interactNPC(int i){
+        if (i != -1) {
+        }
+
+    }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         switch (direction) {
